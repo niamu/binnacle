@@ -7,11 +7,11 @@
 
 (defn image? [ext] (contains? #{"png" "jpg" "gif" "svg"} ext))
 
-(defn extension [filename] (last (string/split (name filename) #"\.")))
+(defn extension [filename] (last (string/split filename #"\.")))
 
 (defn mime
   [path]
-  (let [ext (extension (last path))]
+  (let [ext (extension (name (last path)))]
     (cond
       (image? ext) (if (svg? ext)
                      (str "image/" ext "+xml")

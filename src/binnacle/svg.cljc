@@ -9,7 +9,7 @@
   (and (string? s) (re-matches #"\s+$" s)))
 
 (defn clean-hiccup
-  "Remove and empty spaces between tags"
+  "Remove empty spaces between tags"
   [[tag attrs & children]]
   [tag attrs (into [:g] (remove empty-string? children))])
 

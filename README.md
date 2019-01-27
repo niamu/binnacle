@@ -12,13 +12,12 @@ payload to the client for the trade-off of being able to manipulate
 SVGs within the client without the need to store multiple colour
 variants of the same image.
 
-[![binnacle](http://clojars.org/com.powernoodle/binnacle/latest-version.svg)](https://clojars.org/com.powernoodle/binnacle)
+[![binnacle](http://clojars.org/com.niamu/binnacle/latest-version.svg)](https://clojars.org/com.niamu/binnacle)
 
 ## Usage
 
-Place all of your assets that you want to package into the assets
-hash-map in a directory somewhere accessible in your project
-(i.e. "resources/assets").
+Place all of your assets that you want to package into the binnacle
+assets hash-map on your classpath.
 
 Currently supported file types:
 
@@ -27,28 +26,31 @@ Currently supported file types:
 - gif
 - woff
 
+The following example assumes images and fonts were placed on the
+classpath at "./resources/assets/". Note how the "./resources/" prefix
+is removed from the assets hash-map. This is done to match the paths
+when running from within the context of a JAR file.
+
 ```Clojure
 (ns example.app
   (:require [binnacle.core :as binnacle]))
 
-(def assets
-    (binnacle/assets "resources/assets/"))
+(def assets (binnacle/assets))
+#=> {:assets {:logo.png "BASE64_ENCODED_DATA..."
+              :logo.svg [:svg...]}}
 
-=> {:resources {:assets {:logo.png "BASE64_ENCODED_DATA..."
-                         :logo.svg [:svg...]}
+(binnacle/data-url assets [:assets :logo.png])
+#=> "data:image/png;base64,BASE64_ENCODED_DATA..."
 
-(binnacle/data-url assets [:resources :assets :logo.png])
-=> "data:image/png;base64,BASE64_ENCODED_DATA..."
-
-(binnacle/data-url assets [:resources :assets :logo.svg])
-=> "data:image/svg+xml;utf8,%3Csvg%20..."
+(binnacle/data-url assets [:assets :logo.svg])
+#=> "data:image/svg+xml;utf8,%3Csvg%20..."
 ```
 
 SVG files are represented as Hiccup data structures for easy
 manipulation such as changing the fill colour.
 
 ```Clojure
-(update-in assets [:resources :flux.svg]
+(update-in assets [:assets :logo.svg]
            (fn [[tag attrs & children]]
              [tag (assoc attrs :fill "red") children]))
 ```
@@ -65,12 +67,9 @@ browser.
   #?(:cljs (:require-macros
             [example.app :refer [assets*]])))
 
-#?(:clj
-   (defmacro assets*
-     [path]
-     (binnacle/assets path)))
+#?(:clj (defmacro assets* [] (binnacle/assets)))
 
-(def assets (assets* "resources/assets"))
+(def assets (assets*))
 ```
 
 ## License

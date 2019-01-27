@@ -1,3 +1,7 @@
 {:deps {org.clojure/clojure {:mvn/version "1.10.0"}
         org.clojure/data.codec {:mvn/version "0.1.0"}
-        hickory {:mvn/version "0.7.1"}}}
+        org.clojure/java.classpath {:mvn/version "0.3.0"}
+        hickory {:mvn/version "0.7.1"}}
+ :paths ["src"]
+ :aliases {:assets {:extra-paths ["resources"]
+                    :main-opts ["-m" "binnacle.core"]}}}
