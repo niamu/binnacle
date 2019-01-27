@@ -7,7 +7,7 @@
 
 (defn file-bytes
   [file]
-  (with-open [reader (io/input-stream (.getPath file))]
+  (with-open [reader (io/input-stream file)]
     (let [length (.length file)
           buffer (byte-array length)]
       (.read reader buffer 0 length)
@@ -21,7 +21,7 @@
 
 (defn path
   [file]
-  (map keyword (string/split (.getPath file) #"/")))
+  (mapv keyword (string/split (.getPath file) #"/")))
 
 (defn file-map
   [resources-path]

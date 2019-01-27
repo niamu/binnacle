@@ -11,6 +11,6 @@
     (str "data:" mime ";"
          (if (= mime "image/svg+xml")
            (str "utf8," (codec/url-encode (svg/as-html resource)))
-           (str "base64," (codec/base64-encode resource))))))
+           (str "base64," resource)))))
 
 #?(:clj (defn assets [path] (io/file-map path)))
